@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SHAP Evidence | DermaAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <a href="{{ url_for('index') }}" class="brand_link">
+            <div class="logo_mark">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="5" y="5" width="38" height="38" rx="12"></rect>
+                    <path d="M13 25h6l3-8 5 16 4-8h4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3>DermaAI</h3>
+                <p>Diagnostic Support Tool</p>
+            </div>
+        </a>
+    </div>
+
+    <nav>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('documentation') }}">Documentation</a>
+        <a href="{{ url_for('shap_evidence') }}">SHAP Evidence</a>
+        <a href="{{ url_for('help_page') }}">Help</a>
+    </nav>
+
+    <div class="profile_chip refined_profile">
+        <div class="avatar">AI</div>
+        <div>
+            <strong>Research Prototype</strong>
+            <span>Academic Mode</span>
+        </div>
+    </div>
+</header>
+
+<main class="content_shell">
+
+    <section class="content_hero">
+        <span class="eyebrow">Secondary explainability evidence</span>
+        <h1>SHAP Evidence</h1>
+        <p>
+            This page presents SHAP as a supporting explainability method used during the experimental stage of the DermaAI system.
+            Grad CAM remains the primary real time explanation method in the deployed Flask prototype.
+        </p>
+    </section>
+
+    <section class="content_grid shap_intro_grid">
+        <div class="content_card">
+            <h2>What SHAP shows</h2>
+            <p>
+                SHAP explains how different image regions contribute to a model prediction. In this project, it was used to observe
+                pixel level contribution patterns for a selected dermoscopic image and compare them with the model prediction output.
+            </p>
+        </div>
+
+        <div class="content_card">
+            <h2>Why it is supporting evidence</h2>
+            <p>
+                SHAP can be computationally expensive for image based deep learning models. Therefore, it was implemented as a notebook
+                based explainability experiment, while Grad CAM was selected for real time use in the Flask application.
+            </p>
+        </div>
+    </section>
+
+    <section class="shap_panel">
+        <div class="shap_visual_card">
+            <div class="card_header">
+                <h2>SHAP Attribution Output</h2>
+                <span>Notebook evidence</span>
+            </div>
+
+            {% if shap_image_url %}
+                <img src="{{ shap_image_url }}" alt="SHAP attribution output" class="shap_image">
+            {% else %}
+                <div class="shap_placeholder">
+                    <h3>No SHAP image found yet</h3>
+                    <p>
+                        Copy your generated SHAP PNG file into
+                        <strong>flask_app/static/shap_outputs</strong>
+                        and refresh this page.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="shap_detail_card">
+            <h2>Implementation Summary</h2>
+
+            <div class="shap_step">
+                <strong>1</strong>
+                <div>
+                    <h3>Background sample selected</h3>
+                    <p>A small training sample was used as the background reference for SHAP GradientExplainer.</p>
+                </div>
+            </div>
+
+            <div class="shap_step">
+                <strong>2</strong>
+                <div>
+                    <h3>Test image explained</h3>
+                    <p>One representative test image was passed through the trained MobileNetV2 model for attribution analysis.</p>
+                </div>
+            </div>
+
+            <div class="shap_step">
+                <strong>3</strong>
+                <div>
+                    <h3>Attribution overlay generated</h3>
+                    <p>The SHAP visual output highlights regions that contributed to the predicted class.</p>
+                </div>
+            </div>
+
+            <div class="shap_step">
+                <strong>4</strong>
+                <div>
+                    <h3>Deployment decision made</h3>
+                    <p>Grad CAM was kept as the live explanation method because it is faster and more suitable for real time analysis.</p>
+                </div>
+            </div>
+
+            {% if shap_table_url %}
+                <a href="{{ shap_table_url }}" class="small_action_button main_action shap_download_button">
+                    Open SHAP Evidence Table
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="shap_note">
+        <h2>Academic interpretation</h2>
+        <p>
+            SHAP was implemented to strengthen the explainability component of the research prototype. However, because the system is
+            designed as a lightweight Flask application, the final deployed workflow uses Grad CAM for real time visual explanation.
+            This design choice balances transparency, usability and computational feasibility.
+        </p>
+    </section>
+
+</main>
+
+</body>
+</html>

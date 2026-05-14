@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DermaAI Diagnostic Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <a href="{{ url_for('index') }}" class="brand_link">
+            <div class="logo_mark">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="5" y="5" width="38" height="38" rx="12"></rect>
+                    <path d="M13 25h6l3-8 5 16 4-8h4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3>DermaAI</h3>
+                <p>Diagnostic Support Tool</p>
+            </div>
+        </a>
+    </div>
+
+  <nav>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('documentation') }}">Documentation</a>
+    <a href="{{ url_for('shap_evidence') }}">SHAP Evidence</a>
+    <a href="{{ url_for('help_page') }}">Help</a>
+</nav>
+
+    <div class="profile_chip refined_profile">
+        <div class="avatar">AI</div>
+        <div>
+            <strong>Research Prototype</strong>
+            <span>Academic Mode</span>
+        </div>
+    </div>
+</header>
+
+<main class="upload_shell">
+
+    <section class="hero">
+        <div class="tabs">
+            <span class="active">Upload</span>
+            <span>Results</span>
+            <span>Explainability</span>
+        </div>
+
+        <h1>AI Assisted Skin Lesion Analysis</h1>
+        <p>
+            Upload a dermoscopic image to receive AI based diagnostic support,
+            confidence scoring, probability distribution and Grad CAM visual explanation.
+        </p>
+    </section>
+
+    <section class="upload_card">
+        <form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data" id="upload_form">
+
+            <div class="drop_zone" id="drop_zone">
+                <div class="upload_circle">↑</div>
+
+                <strong>Drop your dermoscopic image here, or browse</strong>
+                <span>Supports JPG, PNG, JPEG up to 8 MB</span>
+
+                <button type="button" class="browse_button" id="browse_button">
+                    Browse Image
+                </button>
+
+                <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png" class="hidden_file_input">
+
+                <p id="file_name" class="file_name">No image selected yet</p>
+            </div>
+
+            <button type="submit" class="analyse_button">Analyse Image</button>
+
+            <div id="client_error_box" class="client_error_box">
+                No image file was uploaded. Please select an image before submitting.
+            </div>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash_box">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="disclaimer_inline">
+            <span>ⓘ</span>
+            <p>
+                <strong>Medical Disclaimer:</strong>
+                This AI tool is designed for academic research and diagnostic support only.
+                It is not a substitute for professional medical advice, diagnosis or treatment.
+            </p>
+        </div>
+    </section>
+
+    <section class="feature_grid">
+        <div class="feature_card">
+            <div class="feature_icon_svg">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"></path>
+                </svg>
+            </div>
+            <h3>Fast Analysis</h3>
+            <p>Processes dermoscopic images and generates AI based predictions using the trained MobileNetV2 model.</p>
+        </div>
+
+        <div class="feature_card">
+            <div class="feature_icon_svg">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"></path>
+                    <path d="M9 12l2 2 4-5"></path>
+                </svg>
+            </div>
+            <h3>Decision Support</h3>
+            <p>Highlights confidence level, uncertainty indicators and clinical review recommendations.</p>
+        </div>
+
+        <div class="feature_card">
+            <div class="feature_icon_svg">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                    <path d="M8 15l3-3 2 2 3-5"></path>
+                    <circle cx="8" cy="8" r="1"></circle>
+                </svg>
+            </div>
+            <h3>Explainable Output</h3>
+            <p>Uses Grad CAM to visualise regions that influenced the model prediction.</p>
+        </div>
+    </section>
+
+    <div id="loading_overlay" class="loading_overlay">
+        <div class="loader_card">
+            <div class="loader_ring"></div>
+            <h2>Analysing Image</h2>
+            <p>DermaAI is generating prediction probabilities and Grad CAM explanation.</p>
+            <span>Please wait while the model processes the uploaded image.</span>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <div>
+        <h3>DermaAI</h3>
+        <p>Explainable AI diagnostic support for skin lesion analysis.</p>
+    </div>
+
+    <div class="footer_links">
+        <span>Final year research prototype</span>
+        <span>HAM10000 Dataset</span>
+        <span>MobileNetV2</span>
+    </div>
+</footer>
+
+<script>
+    const form = document.getElementById("upload_form");
+    const dropZone = document.getElementById("drop_zone");
+    const browseButton = document.getElementById("browse_button");
+    const imageInput = document.getElementById("image");
+    const fileNameText = document.getElementById("file_name");
+    const loadingOverlay = document.getElementById("loading_overlay");
+    const clientErrorBox = document.getElementById("client_error_box");
+
+    function updateFileName() {
+        fileNameText.classList.remove("file_warning");
+        clientErrorBox.style.display = "none";
+
+        if (imageInput.files.length > 0) {
+            fileNameText.textContent = "Selected image: " + imageInput.files[0].name;
+        } else {
+            fileNameText.textContent = "No image selected yet";
+        }
+    }
+
+    browseButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        imageInput.click();
+    });
+
+    dropZone.addEventListener("click", function () {
+        imageInput.click();
+    });
+
+    imageInput.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+
+    imageInput.addEventListener("change", updateFileName);
+
+    dropZone.addEventListener("dragover", function (event) {
+        event.preventDefault();
+        dropZone.classList.add("drop_zone_active");
+    });
+
+    dropZone.addEventListener("dragleave", function () {
+        dropZone.classList.remove("drop_zone_active");
+    });
+
+    dropZone.addEventListener("drop", function (event) {
+        event.preventDefault();
+        dropZone.classList.remove("drop_zone_active");
+
+        if (event.dataTransfer.files.length > 0) {
+            imageInput.files = event.dataTransfer.files;
+            updateFileName();
+        }
+    });
+
+    form.addEventListener("submit", function (event) {
+        if (imageInput.files.length === 0) {
+            event.preventDefault();
+
+            fileNameText.textContent = "Please select an image before analysis.";
+            fileNameText.classList.add("file_warning");
+
+            clientErrorBox.style.display = "block";
+
+            clientErrorBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            return;
+        }
+
+        clientErrorBox.style.display = "none";
+        loadingOverlay.classList.add("show_loader");
+    });
+</script>
+
+</body>
+</html>

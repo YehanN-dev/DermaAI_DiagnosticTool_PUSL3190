@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DermaAI Analysis Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="logo_mark">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+                <rect x="5" y="5" width="38" height="38" rx="12"></rect>
+                <path d="M13 25h6l3-8 5 16 4-8h4"></path>
+            </svg>
+        </div>
+        <div>
+            <h3>DermaAI</h3>
+            <p>AI Diagnostic System v1.0</p>
+        </div>
+    </div>
+
+    <div class="system_online">System Online</div>
+</header>
+
+<main class="report_shell">
+
+    <div class="breadcrumb">
+        Dashboard / Cases / <strong>Analysis Report</strong>
+    </div>
+
+    <section class="report_header polished_header">
+        <div>
+            <h1>Lesion Analysis Report</h1>
+            <p>Analysed using fine tuned MobileNetV2 with Grad CAM visual explanation</p>
+        </div>
+
+        <div class="report_actions">
+            <button type="button" class="small_action_button light_action" onclick="window.print()">
+                Print Report
+            </button>
+            <a href="{{ url_for('index') }}" class="small_action_button main_action">
+                Analyse New Image
+            </a>
+        </div>
+    </section>
+
+    <section class="report_status_strip">
+        <div>
+            <span>Model</span>
+            <strong>MobileNetV2</strong>
+        </div>
+        <div>
+            <span>Dataset</span>
+            <strong>HAM10000</strong>
+        </div>
+        <div>
+            <span>Output</span>
+            <strong>Prediction and Grad CAM</strong>
+        </div>
+        <div>
+            <span>Review Status</span>
+            <strong>Clinical review required</strong>
+        </div>
+    </section>
+
+    <section class="report_grid">
+        <div class="card image_card">
+            <div class="card_header">
+                <h2>Lesion Image</h2>
+                <span>Uploaded Image</span>
+            </div>
+
+            <img src="{{ uploaded_image_url }}" alt="Uploaded lesion image" class="lesion_image">
+
+            <div class="meta_grid">
+                <div>
+                    <span>Model</span>
+                    <strong>MobileNetV2</strong>
+                </div>
+                <div>
+                    <span>Status</span>
+                    <strong>Processed</strong>
+                </div>
+                <div>
+                    <span>Dataset</span>
+                    <strong>HAM10000</strong>
+                </div>
+                <div>
+                    <span>Review</span>
+                    <strong>Required</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card prediction_card">
+            <h2>Prediction Result</h2>
+            <p class="muted">AI powered diagnostic support result</p>
+
+            <div class="primary_diagnosis {% if result.predicted_label in ['mel', 'bcc', 'akiec'] %}risk_high{% else %}risk_standard{% endif %}">
+                <div>
+                    <span>Primary Prediction</span>
+                    <h3>{{ result.predicted_class_name }}</h3>
+                </div>
+
+                <div class="score_block">
+                    <strong>{{ "%.2f"|format(result.confidence_percent|float) }}%</strong>
+                    <p>Confidence Score</p>
+                </div>
+            </div>
+
+            <h3 class="mini_heading">Probability Distribution</h3>
+
+            <div class="probability_list">
+                {% for row in result.top_3 %}
+                <div class="probability_item">
+                    <div class="probability_top">
+                        <div>
+                            <strong>{{ row.class_name }}</strong>
+                            <span>{{ row.class_code }}</span>
+                        </div>
+                        <b>{{ "%.2f"|format(row.probability_percent|float) }}%</b>
+                    </div>
+                    <div class="bar_track">
+                        <div class="bar_fill" style='width: {{ "%.2f"|format(row.probability_percent|float) }}%;'></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="model_box">
+                <strong>Model Information</strong>
+                <p>
+                    Fine tuned MobileNetV2 trained using the HAM10000 dataset.
+                    Final test accuracy recorded in the experiment: 64.23 percent.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="wide_explainability_card">
+        <div>
+            <span class="eyebrow">Explainable AI Summary</span>
+            <h2>How the AI reached this result</h2>
+            <p>
+                The uploaded dermoscopic image is resized and preprocessed before being passed into the fine tuned MobileNetV2 model.
+                The model produces probability scores for seven HAM10000 lesion categories, and the highest probability is selected as the primary prediction.
+                Grad CAM is then generated to highlight the image regions that had the strongest influence on the model decision.
+            </p>
+        </div>
+
+        <div class="explainability_steps">
+            <div>
+                <strong>1</strong>
+                <span>Image preprocessing</span>
+            </div>
+            <div>
+                <strong>2</strong>
+                <span>Model prediction</span>
+            </div>
+            <div>
+                <strong>3</strong>
+                <span>Probability ranking</span>
+            </div>
+            <div>
+                <strong>4</strong>
+                <span>Grad CAM explanation</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="report_grid explanation_row">
+        <div class="card gradcam_card gradcam_card_large">
+            <h2>Grad CAM Visualisation</h2>
+            <p class="muted">Heatmap highlights regions influencing the model prediction</p>
+
+            <div class="gradcam_frame">
+                <img src="{{ gradcam_image_url }}" alt="Grad CAM explanation" class="gradcam_image">
+            </div>
+
+            <div class="attention_scale">
+                <span>Attention Level:</span>
+                <div class="scale_bar"></div>
+                <small>Low to High</small>
+            </div>
+
+            <div class="explain_note">
+                The warmer regions indicate stronger model attention. This visual output supports transparency by showing where the model focused during prediction.
+            </div>
+        </div>
+
+        <div class="card interpretation_card">
+            <h2>Model Interpretation</h2>
+            <p class="muted">AI reasoning and decision support indicators</p>
+
+            <div class="clinical_box">
+                <strong>Clinical Review Required</strong>
+                <p>This prediction must be reviewed by a qualified medical professional.</p>
+            </div>
+
+            <h3 class="mini_heading">Decision Support Flags</h3>
+
+            <div class="finding_list">
+                {% for flag in result.flags %}
+                <div class="finding_item">
+                    <span>!</span>
+                    <p>{{ flag }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h3 class="mini_heading">Full Probability Distribution</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Description</th>
+                        <th>Probability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result.probability_table %}
+                    <tr>
+                        <td>{{ row.class_code }}</td>
+                        <td>{{ row.class_name }}</td>
+                        <td>{{ "%.2f"|format(row.probability_percent|float) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="bottom_note">
+        <strong>Medical Disclaimer:</strong>
+        This system provides AI assisted decision support only. It does not replace dermatologist assessment,
+        biopsy, clinical history or professional diagnosis. Clinical confirmation is required before any decision.
+    </section>
+
+</main>
+
+</body>
+</html>

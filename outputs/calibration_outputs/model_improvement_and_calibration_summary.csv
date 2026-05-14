@@ -1,0 +1,5 @@
+Stage,Purpose,Accuracy,Mean Confidence,Notes
+Fine Tuned MobileNetV2,Final selected classification model,0.6423,,Best current saved model from fine tuning stage
+Normal Prediction Calibration,Assess whether confidence scores are reliable,0.6423499031633312,0.5659821033477783,ECE score: 0.0818
+Normal Same Sample Evaluation,Evaluate normal prediction on the same sample used for TTA,0.7,0.5830176204442978,Sample size: 50
+TTA Same Sample Evaluation,Assess whether averaged augmented predictions improve stability,0.62,0.5624846017360687,"Sample size: 50, augmentations per image: 5"

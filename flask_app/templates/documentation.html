@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DermaAI Documentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <a href="{{ url_for('index') }}" class="brand_link">
+            <div class="logo_mark">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="5" y="5" width="38" height="38" rx="12"></rect>
+                    <path d="M13 25h6l3-8 5 16 4-8h4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3>DermaAI</h3>
+                <p>Diagnostic Support Tool</p>
+            </div>
+        </a>
+    </div>
+
+    <nav>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('documentation') }}">Documentation</a>
+    <a href="{{ url_for('shap_evidence') }}">SHAP Evidence</a>
+    <a href="{{ url_for('help_page') }}">Help</a>
+</nav>
+
+    <div class="profile_chip refined_profile">
+        <div class="avatar">AI</div>
+        <div>
+            <strong>Research Prototype</strong>
+            <span>Academic Mode</span>
+        </div>
+    </div>
+</header>
+
+<main class="content_shell">
+    <section class="content_hero">
+        <span class="eyebrow">System workflow</span>
+        <h1>Documentation</h1>
+        <p>
+            This page explains the main workflow followed by the DermaAI diagnostic support prototype.
+        </p>
+    </section>
+
+    <section class="timeline_card">
+        <div class="timeline_step">
+            <strong>1</strong>
+            <div>
+                <h3>Image Upload</h3>
+                <p>The user uploads a dermoscopic skin lesion image in JPG, JPEG or PNG format.</p>
+            </div>
+        </div>
+
+        <div class="timeline_step">
+            <strong>2</strong>
+            <div>
+                <h3>Preprocessing</h3>
+                <p>The image is resized to the model input size and preprocessed using the MobileNetV2 preprocessing pipeline.</p>
+            </div>
+        </div>
+
+        <div class="timeline_step">
+            <strong>3</strong>
+            <div>
+                <h3>Prediction</h3>
+                <p>The fine tuned MobileNetV2 model generates probability scores for seven HAM10000 lesion classes.</p>
+            </div>
+        </div>
+
+        <div class="timeline_step">
+            <strong>4</strong>
+            <div>
+                <h3>Decision Support</h3>
+                <p>The system displays the primary prediction, top probability scores and confidence based review flags.</p>
+            </div>
+        </div>
+
+        <div class="timeline_step">
+            <strong>5</strong>
+            <div>
+                <h3>Grad CAM Explanation</h3>
+                <p>Grad CAM highlights the image regions that contributed most strongly to the model prediction.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

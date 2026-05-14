@@ -1,0 +1,8 @@
+class_code,class_name,probability,probability_percent
+mel,Melanoma,0.39040852,39.04
+nv,Melanocytic nevi,0.25160533,25.16
+bkl,Benign keratosis like lesions,0.21776375,21.78
+df,Dermatofibroma,0.044441905,4.44
+akiec,Actinic keratoses and intraepithelial carcinoma,0.04436697,4.44
+bcc,Basal cell carcinoma,0.03434042,3.43
+vasc,Vascular lesions,0.017073011,1.71

@@ -1,0 +1,3 @@
+Method,Accuracy,Mean Confidence,Sample Size,Notes
+Normal prediction on same 50 image sample,0.7,0.5830176204442978,50,Single forward pass per image
+TTA prediction on same 50 image sample,0.62,0.5624846017360687,50,Averaged prediction using 5 augmented versions per image

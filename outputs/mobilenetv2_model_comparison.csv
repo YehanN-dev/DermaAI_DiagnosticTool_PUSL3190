@@ -1,0 +1,4 @@
+Model Stage,Test Accuracy,Test Loss,Weighted F1 Score,Macro F1 Score
+Initial MobileNetV2,0.5152,1.3252,0.5766,0.3306
+Continued Training MobileNetV2,0.6172,1.0297,,
+Fine Tuned MobileNetV2,0.6423,0.9994,0.6825,0.4724

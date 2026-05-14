@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DermaAI Help</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <a href="{{ url_for('index') }}" class="brand_link">
+            <div class="logo_mark">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="5" y="5" width="38" height="38" rx="12"></rect>
+                    <path d="M13 25h6l3-8 5 16 4-8h4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3>DermaAI</h3>
+                <p>Diagnostic Support Tool</p>
+            </div>
+        </a>
+    </div>
+
+  <nav>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('documentation') }}">Documentation</a>
+    <a href="{{ url_for('shap_evidence') }}">SHAP Evidence</a>
+    <a href="{{ url_for('help_page') }}">Help</a>
+</nav>
+
+    <div class="profile_chip refined_profile">
+        <div class="avatar">AI</div>
+        <div>
+            <strong>Research Prototype</strong>
+            <span>Academic Mode</span>
+        </div>
+    </div>
+</header>
+
+<main class="content_shell">
+    <section class="content_hero">
+        <span class="eyebrow">User guidance</span>
+        <h1>Help</h1>
+        <p>
+            Use this page to understand how to upload an image and interpret the system output safely.
+        </p>
+    </section>
+
+    <section class="help_grid">
+        <div class="content_card">
+            <h2>Supported images</h2>
+            <p>The system accepts JPG, JPEG and PNG dermoscopic image files up to 8 MB.</p>
+        </div>
+
+        <div class="content_card">
+            <h2>How to analyse</h2>
+            <p>Select or drag an image into the upload area, then click Analyse Image. The system will generate a prediction report and Grad CAM output.</p>
+        </div>
+
+        <div class="content_card">
+            <h2>How to read confidence</h2>
+            <p>A higher confidence score means the model assigned more probability to the predicted class. It does not guarantee clinical correctness.</p>
+        </div>
+
+        <div class="content_card">
+            <h2>Important warning</h2>
+            <p>This application is a research prototype. Always consult a qualified healthcare professional for medical diagnosis and treatment decisions.</p>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

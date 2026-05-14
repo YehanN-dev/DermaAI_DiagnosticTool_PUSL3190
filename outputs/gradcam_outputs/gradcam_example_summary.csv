@@ -1,0 +1,8 @@
+image_id,true_label,predicted_label,confidence,saved_path
+ISIC_0028224,akiec,akiec,85.67,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_akiec.png
+ISIC_0030755,bcc,bcc,51.36,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_bcc.png
+ISIC_0024943,bkl,bkl,31.48,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_bkl.png
+ISIC_0031271,df,df,77.27,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_df.png
+ISIC_0031977,mel,nv,74.04,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_mel.png
+ISIC_0025308,nv,nv,68.95,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_nv.png
+ISIC_0025924,vasc,vasc,99.96,E:\DermaAI_DiagnosticTool\outputs\gradcam_outputs\gradcam_example_vasc.png

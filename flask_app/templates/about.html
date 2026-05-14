@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About DermaAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <a href="{{ url_for('index') }}" class="brand_link">
+            <div class="logo_mark">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="5" y="5" width="38" height="38" rx="12"></rect>
+                    <path d="M13 25h6l3-8 5 16 4-8h4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3>DermaAI</h3>
+                <p>Diagnostic Support Tool</p>
+            </div>
+        </a>
+    </div>
+
+    <nav>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('documentation') }}">Documentation</a>
+    <a href="{{ url_for('shap_evidence') }}">SHAP Evidence</a>
+    <a href="{{ url_for('help_page') }}">Help</a>
+</nav>
+
+    <div class="profile_chip refined_profile">
+        <div class="avatar">AI</div>
+        <div>
+            <strong>Research Prototype</strong>
+            <span>Academic Mode</span>
+        </div>
+    </div>
+</header>
+
+<main class="content_shell">
+    <section class="content_hero">
+        <span class="eyebrow">About the system</span>
+        <h1>DermaAI Diagnostic Support Tool</h1>
+        <p>
+            DermaAI is an academic research prototype designed to support skin lesion analysis using deep learning and explainable AI.
+            The system classifies dermoscopic images into HAM10000 lesion categories and provides Grad CAM visualisation to improve model transparency.
+        </p>
+    </section>
+
+    <section class="content_grid">
+        <div class="content_card">
+            <h2>Purpose</h2>
+            <p>
+                The purpose of this project is to demonstrate how a trained image classification model can be integrated into a usable diagnostic support interface.
+                It is designed for research and learning, not for independent medical diagnosis.
+            </p>
+        </div>
+
+        <div class="content_card">
+            <h2>Model</h2>
+            <p>
+                The implemented model is based on fine tuned MobileNetV2. It produces probability scores across seven HAM10000 skin lesion classes and displays the most likely prediction.
+            </p>
+        </div>
+
+        <div class="content_card">
+            <h2>Explainability</h2>
+            <p>
+                Grad CAM is used to highlight the image regions that influenced the model output. This helps users understand which visual areas contributed to the prediction.
+            </p>
+        </div>
+
+        <div class="content_card">
+            <h2>Limitations</h2>
+            <p>
+                This tool does not replace dermatologist assessment, biopsy, clinical history or professional medical judgement.
+                All outputs must be treated as decision support only.
+            </p>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
