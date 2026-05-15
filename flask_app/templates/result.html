@@ -33,7 +33,9 @@
     <section class="report_header polished_header">
         <div>
             <h1>Lesion Analysis Report</h1>
-            <p>Analysed using fine tuned MobileNetV2 with Grad CAM visual explanation</p>
+            <p>
+                Analysed using fine tuned MobileNetV2 with Grad CAM visual explanation
+            </p>
         </div>
 
         <div class="report_actions">
@@ -51,19 +53,123 @@
             <span>Model</span>
             <strong>MobileNetV2</strong>
         </div>
+
         <div>
             <span>Dataset</span>
             <strong>HAM10000</strong>
         </div>
+
         <div>
             <span>Output</span>
-            <strong>Prediction and Grad CAM</strong>
+            {% if result.input_warning == true %}
+                <strong>No classification displayed</strong>
+            {% else %}
+                <strong>Prediction and Grad CAM</strong>
+            {% endif %}
         </div>
+
         <div>
             <span>Review Status</span>
-            <strong>Clinical review required</strong>
+            {% if result.input_warning == true %}
+                <strong>Rejected for interpretation</strong>
+            {% else %}
+                <strong>Clinical review required</strong>
+            {% endif %}
         </div>
     </section>
+
+    {% if result.input_warning == true %}
+
+    <section class="warning-card warning-card-large">
+        <div class="warning-label">Uncertainty Safeguard</div>
+
+        <h2>
+            {{ result.warning_title }}
+        </h2>
+
+        <p>
+            {{ result.warning_message }}
+        </p>
+
+        {% if result.warning_reasons %}
+        <div class="warning-details">
+            {% for reason in result.warning_reasons %}
+                <p>{{ reason }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <p class="clinical-warning">
+            No lesion classification has been displayed because the model did not meet the confidence requirements for reliable interpretation.
+        </p>
+
+        <div class="warning-actions">
+            <a href="{{ url_for('index') }}" class="small_action_button main_action">
+                Upload Another Image
+            </a>
+        </div>
+    </section>
+
+    <section class="report_grid">
+        <div class="card image_card">
+            <div class="card_header">
+                <h2>Uploaded Image</h2>
+                <span>Not interpreted</span>
+            </div>
+
+            <img src="{{ uploaded_image_url }}" alt="Uploaded image" class="lesion_image">
+
+            <div class="meta_grid">
+                <div>
+                    <span>Status</span>
+                    <strong>Rejected for interpretation</strong>
+                </div>
+
+                <div>
+                    <span>Reason</span>
+                    <strong>Very low model confidence</strong>
+                </div>
+
+                <div>
+                    <span>Review</span>
+                    <strong>New image required</strong>
+                </div>
+
+                <div>
+                    <span>Output</span>
+                    <strong>No classification shown</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card prediction_card">
+            <h2>Analysis Not Displayed</h2>
+
+            <p class="muted">
+                The model output was suppressed to avoid presenting an unreliable classification.
+            </p>
+
+            <div class="model_box">
+                <strong>Why was this blocked?</strong>
+                <p>
+                    This prototype suppresses the classification output when model confidence is very low,
+                    or when low confidence is combined with uncertainty between the top predicted classes.
+                    This reduces the risk of presenting a misleading result for ambiguous, low quality,
+                    or out of scope inputs.
+                </p>
+            </div>
+
+            <div class="clinical_box">
+                <strong>Recommended Action</strong>
+                <p>
+                    Please upload a clear dermoscopic skin lesion image. For real medical concerns,
+                    consult a qualified healthcare professional.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    {% else %}
 
     <section class="report_grid">
         <div class="card image_card">
@@ -79,14 +185,17 @@
                     <span>Model</span>
                     <strong>MobileNetV2</strong>
                 </div>
+
                 <div>
                     <span>Status</span>
                     <strong>Processed</strong>
                 </div>
+
                 <div>
                     <span>Dataset</span>
                     <strong>HAM10000</strong>
                 </div>
+
                 <div>
                     <span>Review</span>
                     <strong>Required</strong>
@@ -122,6 +231,7 @@
                         </div>
                         <b>{{ "%.2f"|format(row.probability_percent|float) }}%</b>
                     </div>
+
                     <div class="bar_track">
                         <div class="bar_fill" style='width: {{ "%.2f"|format(row.probability_percent|float) }}%;'></div>
                     </div>
@@ -155,14 +265,17 @@
                 <strong>1</strong>
                 <span>Image preprocessing</span>
             </div>
+
             <div>
                 <strong>2</strong>
                 <span>Model prediction</span>
             </div>
+
             <div>
                 <strong>3</strong>
                 <span>Probability ranking</span>
             </div>
+
             <div>
                 <strong>4</strong>
                 <span>Grad CAM explanation</span>
@@ -176,7 +289,9 @@
             <p class="muted">Heatmap highlights regions influencing the model prediction</p>
 
             <div class="gradcam_frame">
-                <img src="{{ gradcam_image_url }}" alt="Grad CAM explanation" class="gradcam_image">
+                {% if gradcam_image_url %}
+                    <img src="{{ gradcam_image_url }}" alt="Grad CAM explanation" class="gradcam_image">
+                {% endif %}
             </div>
 
             <div class="attention_scale">
@@ -220,6 +335,7 @@
                         <th>Probability</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for row in result.probability_table %}
                     <tr>
@@ -232,6 +348,8 @@
             </table>
         </div>
     </section>
+
+    {% endif %}
 
     <section class="bottom_note">
         <strong>Medical Disclaimer:</strong>

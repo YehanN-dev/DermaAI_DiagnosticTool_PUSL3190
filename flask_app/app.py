@@ -74,14 +74,17 @@ def predict():
 
         prediction_result = predict_image(str(saved_path))
 
-        gradcam_filename = generate_gradcam_panel(
-            image_path=str(saved_path),
-            model=model,
-            last_conv_layer_name=LAST_CONV_LAYER_NAME,
-            predicted_index=prediction_result["predicted_index"],
-            output_folder=str(OUTPUT_FOLDER),
-            output_name=unique_id
-        )
+        gradcam_filename = None
+
+        if not prediction_result["input_warning"]:
+            gradcam_filename = generate_gradcam_panel(
+                image_path=str(saved_path),
+                model=model,
+                last_conv_layer_name=LAST_CONV_LAYER_NAME,
+                predicted_index=prediction_result["predicted_index"],
+                output_folder=str(OUTPUT_FOLDER),
+                output_name=unique_id
+            )
 
     except Exception as error:
         print("Prediction error:", error)
@@ -89,7 +92,11 @@ def predict():
         return redirect(url_for("index"))
 
     uploaded_image_url = url_for("static", filename=f"uploads/{saved_filename}")
-    gradcam_image_url = url_for("static", filename=f"outputs/{gradcam_filename}")
+
+    gradcam_image_url = None
+
+    if gradcam_filename:
+        gradcam_image_url = url_for("static", filename=f"outputs/{gradcam_filename}")
 
     return render_template(
         "result.html",

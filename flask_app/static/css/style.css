@@ -1404,3 +1404,126 @@ th {
         grid-template-columns: 1fr;
     }
 }
+.warning-card {
+    background: #fff4e5;
+    border: 1px solid #f5b95f;
+    border-radius: 18px;
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.warning-label {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a4b00;
+    background: rgba(245, 185, 95, 0.22);
+    padding: 6px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+.warning-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #8a4b00;
+    font-size: 1.35rem;
+}
+
+.warning-card p {
+    color: #4a3520;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.warning-details {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+}
+
+.clinical-warning {
+    font-weight: 700;
+    color: #7a1f1f !important;
+}
+.warning-card-large {
+    text-align: left;
+}
+
+.warning-actions {
+    margin-top: 20px;
+}
+
+.warning-card-large .clinical-warning {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(122, 31, 31, 0.08);
+}
+.warning-card {
+    background: #fff4e5;
+    border: 1px solid #f5b95f;
+    border-radius: 18px;
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.warning-label {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a4b00;
+    background: rgba(245, 185, 95, 0.22);
+    padding: 6px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+.warning-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #8a4b00;
+    font-size: 1.35rem;
+}
+
+.warning-card p {
+    color: #4a3520;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.warning-details {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+}
+
+.clinical-warning {
+    font-weight: 700;
+    color: #7a1f1f !important;
+}
+
+.warning-card-large {
+    text-align: left;
+}
+
+.warning-actions {
+    margin-top: 20px;
+}
+
+.warning-card-large .clinical-warning {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(122, 31, 31, 0.08);
+}

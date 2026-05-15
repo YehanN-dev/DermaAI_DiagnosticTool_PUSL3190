@@ -1,11 +1,17 @@
 ﻿import os
+
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 import tensorflow as tf
+
+import matplotlib
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
 
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+
 
 IMG_SIZE = (224, 224)
 
@@ -15,6 +21,7 @@ def load_and_preprocess_image(image_path):
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = preprocess_input(img_array)
+
     return img_array
 
 
@@ -32,6 +39,10 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index):
         class_channel = predictions[:, pred_index]
 
     grads = tape.gradient(class_channel, conv_outputs)
+
+    if grads is None:
+        raise ValueError("Gradients could not be calculated for Grad CAM.")
+
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
 
     conv_outputs = conv_outputs[0]
@@ -93,6 +104,8 @@ def generate_gradcam_panel(
     output_folder,
     output_name
 ):
+    os.makedirs(output_folder, exist_ok=True)
+
     img_array = load_and_preprocess_image(image_path)
 
     heatmap = make_gradcam_heatmap(
@@ -110,25 +123,28 @@ def generate_gradcam_panel(
     output_filename = f"gradcam_{output_name}.png"
     output_path = os.path.join(output_folder, output_filename)
 
-    plt.figure(figsize=(15, 5))
+    figure = plt.figure(figsize=(15, 5))
 
-    plt.subplot(1, 3, 1)
-    plt.imshow(original_img)
-    plt.title("Original Image")
-    plt.axis("off")
+    try:
+        plt.subplot(1, 3, 1)
+        plt.imshow(original_img)
+        plt.title("Original Image")
+        plt.axis("off")
 
-    plt.subplot(1, 3, 2)
-    plt.imshow(heatmap_coloured)
-    plt.title("Grad CAM Heatmap")
-    plt.axis("off")
+        plt.subplot(1, 3, 2)
+        plt.imshow(heatmap_coloured)
+        plt.title("Grad CAM Heatmap")
+        plt.axis("off")
 
-    plt.subplot(1, 3, 3)
-    plt.imshow(overlay)
-    plt.title("Grad CAM Overlay")
-    plt.axis("off")
+        plt.subplot(1, 3, 3)
+        plt.imshow(overlay)
+        plt.title("Grad CAM Overlay")
+        plt.axis("off")
 
-    plt.tight_layout()
-    plt.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.close()
+        plt.tight_layout()
+        plt.savefig(output_path, dpi=300, bbox_inches="tight")
+
+    finally:
+        plt.close(figure)
 
     return output_filename
